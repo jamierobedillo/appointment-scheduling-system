@@ -212,3 +212,47 @@ class AppointmentRepository:
         finally:
             cursor.close()
             connection.close()
+
+    def search_appointments(self, keyword):
+        connection = get_db_connection()
+        cursor = None
+
+        try:
+            cursor = connection.cursor(dictionary=True)
+
+            search_term = f"%{keyword}%"
+
+            cursor.execute("""
+                SELECT
+                    a.appointment_id,
+                    u.full_name,
+                    u.email,
+                    u.phone,
+                    s.service_name,
+                    s.price,
+                    a.appointment_date,
+                    a.start_time,
+                    a.end_time,
+                    a.status,
+                    a.notes
+                FROM appointments a
+                JOIN users u ON a.user_id = u.user_id
+                JOIN services s ON a.service_id = s.service_id
+                WHERE u.full_name LIKE %s
+                   OR u.email LIKE %s
+                   OR s.service_name LIKE %s
+                   OR a.status LIKE %s
+                ORDER BY a.appointment_date DESC, a.start_time
+            """, (
+                search_term,
+                search_term,
+                search_term,
+                search_term
+            ))
+
+            return cursor.fetchall()
+
+        finally:
+            if cursor:
+                cursor.close()
+            connection.close()

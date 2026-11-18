@@ -119,6 +119,20 @@
     <div class="container">
 
         <h1>Admin Dashboard</h1>
+        
+<form method="GET" action="{{ url_for('admin_dashboard') }}" class="search-form">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search customer, email, service, or status..."
+        value="{{ search }}"
+    >
+
+    <button type="submit">Search</button>
+
+    <a href="{{ url_for('admin_dashboard') }}">Clear</a>
+</form>
+
 
         <p class="subtitle">
             Manage customer appointments and booking requests.

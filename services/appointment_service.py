@@ -23,7 +23,7 @@ class AppointmentService:
         start_time,
         notes=""
     ):
-  
+
         if appointment_date < date.today():
             raise InvalidAppointmentError(
                 "You cannot book an appointment in the past."
@@ -56,7 +56,6 @@ class AppointmentService:
 
         end_time = end_datetime.time()
 
-        
         self.schedule_service.validate_business_hours(
             appointment_date,
             start_time,
@@ -99,6 +98,7 @@ class AppointmentService:
         admin_id,
         new_status
     ):
+
         allowed_statuses = [
             "approved",
             "rejected",
@@ -116,10 +116,13 @@ class AppointmentService:
             new_status
         )
 
-
-
     def cancel_customer_appointment(self, appointment_id, user_id):
         return self.appointment_repository.cancel_customer_appointment(
             appointment_id,
             user_id
+        )
+
+    def search_appointments(self, keyword):
+        return self.appointment_repository.search_appointments(
+            keyword
         )

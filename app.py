@@ -107,12 +107,19 @@ def admin_dashboard():
         flash("Please log in as an administrator.")
         return redirect(url_for("login"))
 
-    appointments = appointment_service.get_all_appointments()
+    keyword = request.args.get("search", "").strip()
+
+    if keyword:
+        appointments = appointment_service.search_appointments(keyword)
+    else:
+        appointments = appointment_service.get_all_appointments()
 
     return render_template(
         "admin_dashboard.html",
-        appointments=appointments
+        appointments=appointments,
+        search=keyword
     )
+
 @app.route("/admin/update-appointment/<int:appointment_id>", methods=["POST"])
 def update_appointment(appointment_id):
 

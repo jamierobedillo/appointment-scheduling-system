@@ -7,7 +7,7 @@ The Appointment Scheduling and Management System is a web-based application deve
 
 It allows customers to register, log in, view available services, book appointments, view appointment records, and cancel pending appointments.
 
-Administrators can log in, view customer appointments, and approve or reject booking requests.
+Administrators can log in, view customer appointments, search appointment records, and approve or reject booking requests.
 
 ## 2. Technologies Used
 
@@ -23,6 +23,7 @@ Administrators can log in, view customer appointments, and approve or reject boo
 ## 3. System Features
 
 ### Customer Features
+
 - Customer registration and login
 - Secure password hashing
 - View available services
@@ -34,9 +35,11 @@ Administrators can log in, view customer appointments, and approve or reject boo
 - Cancel pending appointments
 
 ### Administrator Features
+
 - Administrator login
 - View all customer appointments
 - View customer information
+- Search appointments by customer name, email, service, or status
 - Approve appointment requests
 - Reject appointment requests
 - View appointment statuses
@@ -44,19 +47,30 @@ Administrators can log in, view customer appointments, and approve or reject boo
 ## 4. Object-Oriented Programming Concepts
 
 ### Encapsulation
+
 Private attributes and properties are used to protect object data and validate values.
 
+Examples include the private attributes and property setters in the User, Service, and Appointment classes.
+
 ### Abstraction
-The User abstract class defines a common structure and an abstract dashboard method.
+
+The User abstract class defines a common structure and an abstract dashboard message method.
 
 ### Inheritance
+
 Customer and Admin classes inherit from the User class.
 
 ### Polymorphism
+
 Customer and Admin provide their own implementations of the dashboard message method.
 
+AuthService calls the overridden method without checking the specific child class.
+
 ### Composition
+
 AppointmentManager manages and stores Appointment objects.
+
+It can add, find, cancel, and count appointments.
 
 ## 5. Database Design
 
@@ -85,9 +99,16 @@ Primary keys and foreign keys establish relationships between the tables.
 
 The system uses database transactions to ensure that related operations are completed together.
 
-For example, when a customer cancels an appointment:
+For example, when a customer creates an appointment:
 
-1. The appointment status is updated.
+1. The appointment record is inserted into the appointments table.
+2. An activity record is inserted into appointment_logs.
+3. Both operations are committed together.
+4. If an error occurs, the transaction is rolled back.
+
+The cancellation feature also uses a transaction:
+
+1. The appointment status is updated to cancelled.
 2. A cancellation record is inserted into appointment_logs.
 3. Both operations are committed together.
 4. If an error occurs, the transaction is rolled back.
@@ -95,6 +116,7 @@ For example, when a customer cancels an appointment:
 ## 8. Installation and Setup
 
 ### Requirements
+
 - Python
 - XAMPP or MariaDB Server
 - Git
@@ -140,21 +162,51 @@ For example, when a customer cancels an appointment:
 
 Run the following command in the project terminal:
 
-python -m unittest discover -s tests -v
+    python -m unittest discover -s tests -v
 
-The project currently contains 33 unit tests.
+The project currently contains 43 unit tests, all of which pass.
 
 ## 10. Version Control
 
 Git is used to track project development and maintain version history.
 
-The initial project version has been saved using Git.
+Multiple commits document the development of the system, including:
 
-## 11. Project Developers
+- Initial project setup
+- Project documentation
+- Appointment search functionality
+- Polymorphism implementation and testing
+- Appointment manager improvements and unit tests
+
+## 11. Screenshots
+
+Screenshots of the working application will be included as evidence of system functionality.
+
+Suggested screenshots:
+
+- Homepage
+- Customer registration and login
+- Customer dashboard
+- Appointment booking form
+- Customer appointment history
+- Admin dashboard
+- Appointment search results
+- Appointment approval and rejection
+- Successful unit test execution
+
+## 12. AI Assistance Disclosure
+
+AI assistance was used to support programming explanations, debugging, code review, and development guidance.
+
+The project developer reviewed, tested, and adapted the code during implementation.
+
+## 13. Project Developers
 
 Project Members:
+
 - Jamie Robedillo
-- Add other group members here
+- Add other group members here if applicable.
 
 Course: CSDF101 - Object-Oriented Programming in Python
+
 Project: Appointment Scheduling and Management System

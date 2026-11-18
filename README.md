@@ -202,11 +202,14 @@ The project developer reviewed, tested, and adapted the code during implementati
 
 ## 13. Project Developers
 
-Project Members:
+## 13. Project Developers
 
-- Jamie Robedillo
-- Add other group members here if applicable.
+This project was developed by a group of three students:
 
-Course: CSDF101 - Object-Oriented Programming in Python
+| Name | Roles and Contributions |
+|---|---|
+| **Jamie Robedillo** | Led the system development, implemented its features, conducted testing, and prepared the project documentation. |
+| **Ace Redilla** | Helped plan the project and organized the code by placing it into the appropriate project files. |
+| **Iggyboy Natividad** | Helped plan the project and contributed to the system's code development. |
 
-Project: Appointment Scheduling and Management System
+**Course:** CSDF101 – Object-Oriented Programming in Python

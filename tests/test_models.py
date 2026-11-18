@@ -52,9 +52,9 @@ class TestUserModels(unittest.TestCase):
         )
 
         self.assertIn(
-    "administrator",
-    admin.get_dashboard_message().lower()
-)
+            "administrator",
+            admin.get_dashboard_message().lower()
+        )
 
 
 class TestServiceModel(unittest.TestCase):
@@ -108,6 +108,19 @@ class TestAppointmentModel(unittest.TestCase):
 
         self.assertEqual(appointment.user_id, 1)
         self.assertEqual(appointment.status, "pending")
+        self.assertIsNone(appointment.appointment_id)
+
+    def test_appointment_accepts_valid_id(self):
+        appointment = self.create_sample_appointment()
+        appointment.appointment_id = 10
+
+        self.assertEqual(appointment.appointment_id, 10)
+
+    def test_appointment_rejects_invalid_id(self):
+        appointment = self.create_sample_appointment()
+
+        with self.assertRaises(ValueError):
+            appointment.appointment_id = 0
 
     def test_appointment_rejects_invalid_user_id(self):
         with self.assertRaises(ValueError):
@@ -162,6 +175,52 @@ class TestAppointmentManager(unittest.TestCase):
 
         self.assertEqual(manager.get_appointment_count(), 1)
 
+    def test_manager_assigns_appointment_id(self):
+        manager = AppointmentManager()
+        appointment = self.create_sample_appointment()
+
+        manager.add_appointment(appointment)
+
+        self.assertEqual(appointment.appointment_id, 1)
+
+    def test_manager_assigns_unique_ids(self):
+        manager = AppointmentManager()
+
+        first = self.create_sample_appointment()
+        second = self.create_sample_appointment()
+
+        manager.add_appointment(first)
+        manager.add_appointment(second)
+
+        self.assertEqual(first.appointment_id, 1)
+        self.assertEqual(second.appointment_id, 2)
+
+    def test_find_appointment(self):
+        manager = AppointmentManager()
+        appointment = self.create_sample_appointment()
+
+        manager.add_appointment(appointment)
+
+        found = manager.find_appointment(1)
+
+        self.assertIs(found, appointment)
+
+    def test_find_nonexistent_appointment(self):
+        manager = AppointmentManager()
+
+        self.assertIsNone(manager.find_appointment(999))
+
+    def test_manager_returns_copy_of_appointments(self):
+        manager = AppointmentManager()
+        appointment = self.create_sample_appointment()
+
+        manager.add_appointment(appointment)
+
+        appointments = manager.get_all_appointments()
+        appointments.clear()
+
+        self.assertEqual(manager.get_appointment_count(), 1)
+
     def test_manager_rejects_invalid_object(self):
         manager = AppointmentManager()
 
@@ -176,6 +235,13 @@ class TestAppointmentManager(unittest.TestCase):
         manager.cancel_appointment(appointment)
 
         self.assertEqual(appointment.status, "cancelled")
+
+    def test_cancel_appointment_not_in_manager(self):
+        manager = AppointmentManager()
+        appointment = self.create_sample_appointment()
+
+        with self.assertRaises(ValueError):
+            manager.cancel_appointment(appointment)
 
 
 if __name__ == "__main__":

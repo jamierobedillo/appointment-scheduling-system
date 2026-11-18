@@ -3,12 +3,21 @@ from models.appointment import Appointment
 
 
 class AppointmentManager:
+
     def __init__(self):
         self.__appointments = []
 
     def add_appointment(self, appointment):
         if not isinstance(appointment, Appointment):
             raise TypeError("Only Appointment objects can be added.")
+
+        if appointment.appointment_id is None:
+            existing_ids = [
+                item.appointment_id or 0
+                for item in self.__appointments
+            ]
+
+            appointment.appointment_id = max(existing_ids, default=0) + 1
 
         self.__appointments.append(appointment)
 
@@ -17,7 +26,7 @@ class AppointmentManager:
 
     def find_appointment(self, appointment_id):
         for appointment in self.__appointments:
-            if getattr(appointment, "appointment_id", None) == appointment_id:
+            if appointment.appointment_id == appointment_id:
                 return appointment
 
         return None

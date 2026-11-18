@@ -12,8 +12,10 @@ class Appointment:
         appointment_date,
         start_time,
         end_time,
-        notes=""
+        notes="",
+        appointment_id=None
     ):
+        self.appointment_id = appointment_id
         self.user_id = user_id
         self.service = service
         self.appointment_date = appointment_date
@@ -21,6 +23,19 @@ class Appointment:
         self.end_time = end_time
         self.notes = notes
         self.status = "pending"
+
+    @property
+    def appointment_id(self):
+        return self.__appointment_id
+
+    @appointment_id.setter
+    def appointment_id(self, value):
+        if value is not None and (
+            not isinstance(value, int) or value <= 0
+        ):
+            raise ValueError("Invalid appointment ID.")
+
+        self.__appointment_id = value
 
     @property
     def user_id(self):

@@ -57,7 +57,6 @@ class AuthService:
                 user_data["email"],
                 user_data["phone"]
             )
-
         else:
             user = Customer(
                 user_data["full_name"],
@@ -65,7 +64,11 @@ class AuthService:
                 user_data["phone"]
             )
 
+        # Polymorphism: call the overridden method without checking the object type
+        dashboard_message = user.get_dashboard_message()
+
         return {
             "user_id": user_data["user_id"],
-            "user": user
+            "user": user,
+            "dashboard_message": dashboard_message
         }

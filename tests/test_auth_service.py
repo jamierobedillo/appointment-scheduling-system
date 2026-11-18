@@ -101,6 +101,52 @@ class TestAuthService(unittest.TestCase):
         self.assertEqual(result["user_id"], 2)
         self.assertEqual(result["user"].role, "admin")
 
+    @patch("services.auth_service.check_password_hash")
+    def test_customer_login_returns_polymorphic_message(self, mock_check):
+        mock_check.return_value = True
+
+        self.auth_service.user_repository.get_user_by_email.return_value = {
+            "user_id": 1,
+            "full_name": "Juan Dela Cruz",
+            "email": "juan@example.com",
+            "password": "hashed_password",
+            "phone": "09123456789",
+            "role": "customer"
+        }
+
+        result = self.auth_service.login(
+            "juan@example.com",
+            "Juan12345"
+        )
+
+        self.assertEqual(
+            result["dashboard_message"],
+            "Welcome, Juan Dela Cruz! You can book and manage your appointments here."
+        )
+
+    @patch("services.auth_service.check_password_hash")
+    def test_admin_login_returns_polymorphic_message(self, mock_check):
+        mock_check.return_value = True
+
+        self.auth_service.user_repository.get_user_by_email.return_value = {
+            "user_id": 2,
+            "full_name": "System Administrator",
+            "email": "admin@example.com",
+            "password": "hashed_password",
+            "phone": "09123456789",
+            "role": "admin"
+        }
+
+        result = self.auth_service.login(
+            "admin@example.com",
+            "Admin12345"
+        )
+
+        self.assertEqual(
+            result["dashboard_message"],
+            "Welcome, System Administrator! You can manage customers, services, and appointments here."
+        )
+
     def test_login_rejects_unknown_email(self):
         self.auth_service.user_repository.get_user_by_email.return_value = None
 

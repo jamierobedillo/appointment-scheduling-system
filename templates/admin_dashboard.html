@@ -33,6 +33,10 @@
             text-decoration: none;
         }
 
+        nav a:hover {
+            color: #2A9D8F;
+        }
+
         .container {
             max-width: 1200px;
             margin: 40px auto;
@@ -46,6 +50,47 @@
         .subtitle {
             color: #718096;
             margin-bottom: 30px;
+        }
+
+        .dashboard-message {
+            background: white;
+            border-left: 4px solid #2A9D8F;
+            padding: 15px 20px;
+            margin: 18px 0 25px;
+            border-radius: 5px;
+            color: #243B53;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px;
+            border: 1px solid #CBD5E0;
+            border-radius: 5px;
+        }
+
+        .search-form button {
+            padding: 11px 18px;
+            background: #2A9D8F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-form a {
+            padding: 11px 18px;
+            background: #243B53;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
         }
 
         .appointment-card {
@@ -106,6 +151,17 @@
             border-radius: 5px;
             margin-bottom: 18px;
         }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .actions {
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 
@@ -119,20 +175,25 @@
     <div class="container">
 
         <h1>Admin Dashboard</h1>
-        
-<form method="GET" action="{{ url_for('admin_dashboard') }}" class="search-form">
-    <input
-        type="text"
-        name="search"
-        placeholder="Search customer, email, service, or status..."
-        value="{{ search }}"
-    >
 
-    <button type="submit">Search</button>
+        <div class="dashboard-message">
+            {{ session['dashboard_message'] }}
+        </div>
 
-    <a href="{{ url_for('admin_dashboard') }}">Clear</a>
-</form>
+        <form method="GET" action="{{ url_for('admin_dashboard') }}" class="search-form">
 
+            <input
+                type="text"
+                name="search"
+                placeholder="Search customer, email, service, or status..."
+                value="{{ search }}"
+            >
+
+            <button type="submit">Search</button>
+
+            <a href="{{ url_for('admin_dashboard') }}">Clear</a>
+
+        </form>
 
         <p class="subtitle">
             Manage customer appointments and booking requests.

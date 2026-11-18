@@ -61,6 +61,15 @@
             color: #718096;
         }
 
+        .dashboard-message {
+            background: white;
+            border-left: 4px solid #2A9D8F;
+            padding: 15px 20px;
+            margin-top: 18px;
+            border-radius: 5px;
+            color: #243B53;
+        }
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -144,33 +153,40 @@
 
         <div class="welcome">
             <h1>Welcome, {{ session['full_name'] }}!</h1>
+
             <p>Manage your appointments easily from your dashboard.</p>
+
+            <div class="dashboard-message">
+                {{ session['dashboard_message'] }}
+            </div>
         </div>
 
         <div class="dashboard-grid">
 
             <div class="card">
                 <h3>Book an Appointment</h3>
+
                 <p>
                     Schedule a new appointment by selecting
                     your preferred service, date, and time.
                 </p>
 
                 <a href="{{ url_for('book_appointment') }}" class="btn">
-    Book Appointment
-</a>
+                    Book Appointment
+                </a>
             </div>
 
             <div class="card">
                 <h3>My Appointments</h3>
+
                 <p>
                     View your scheduled appointments and
                     check their current status.
                 </p>
 
                 <a href="{{ url_for('my_appointments') }}" class="btn secondary-btn">
-    View Appointments
-</a>
+                    View Appointments
+                </a>
             </div>
 
         </div>
@@ -183,50 +199,3 @@
 
 </body>
 </html>
-
-
-@app.route("/book-appointment", methods=["GET", "POST"])
-def book_appointment():
-
-    if "user_id" not in session or session.get("role") != "customer":
-        flash("Please log in as a customer.")
-        return redirect(url_for("login"))
-
-    if request.method == "POST":
-
-        try:
-            service_id = int(request.form.get("service_id"))
-            appointment_date = datetime.strptime(
-                request.form.get("appointment_date"), "%Y-%m-%d"
-            ).date()
-
-            start_time = datetime.strptime(
-                request.form.get("start_time"), "%H:%M"
-            ).time()
-
-            notes = request.form.get("notes", "").strip()
-
-            appointment_service.create_booking(
-                session["user_id"],
-                service_id,
-                appointment_date,
-                start_time,
-                notes
-            )
-
-            flash("Your appointment has been booked successfully!")
-            return redirect(url_for("my_appointments"))
-
-        except ValueError as error:
-            flash(str(error))
-
-        except Exception as error:
-            print("Booking error:", error)
-            flash("Unable to book your appointment. Please try again.")
-
-    services = service_repository.get_all_services()
-
-    return render_template(
-        "book_appointment.html",
-        services=services
-    )

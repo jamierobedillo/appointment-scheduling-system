@@ -10,6 +10,7 @@ from services.appointment_service import AppointmentService
 from repositories.service_repository import ServiceRepository
 from datetime import datetime
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -78,6 +79,7 @@ def login():
             session["user_id"] = result["user_id"]
             session["full_name"] = result["user"].full_name
             session["role"] = result["user"].role
+            session["dashboard_message"] = result["dashboard_message"]
 
             if session["role"] == "admin":
                 return redirect(url_for("admin_dashboard"))
@@ -119,6 +121,7 @@ def admin_dashboard():
         appointments=appointments,
         search=keyword
     )
+
 
 @app.route("/admin/update-appointment/<int:appointment_id>", methods=["POST"])
 def update_appointment(appointment_id):

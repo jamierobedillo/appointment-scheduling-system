@@ -1,4 +1,4 @@
-
+import os
 from flask import (
     Flask, render_template, redirect,
     url_for, flash, request, session
@@ -244,4 +244,8 @@ def book_appointment():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=False
+    )
